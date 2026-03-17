@@ -58,7 +58,7 @@ const ArvoSidebar = ({ isOpen, onClose, collapsed, onToggleCollapse }: ArvoSideb
               </span>
             )}
             <button
-              onClick={() => setCollapsed((p) => !p)}
+              onClick={onToggleCollapse}
               className="hidden lg:flex p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors duration-300 text-muted-foreground hover:text-foreground"
             >
               {collapsed ? (
