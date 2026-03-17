@@ -54,7 +54,7 @@ const Index = () => {
       <ArvoSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Area */}
-      <div className="flex-1 flex flex-col lg:ml-72 min-w-0">
+      <div className="flex-1 flex flex-col lg:ml-72 min-w-0 transition-all duration-300">
         {/* Header */}
         <header className="flex items-center h-12 px-4 border-b border-luminous shrink-0">
           <button
