@@ -47,7 +47,7 @@ const ArvoSidebar = ({ isOpen, onClose, collapsed, onToggleCollapse }: ArvoSideb
         {/* Glass panel */}
         <div className="relative flex flex-col h-full glass-surface rounded-r-2xl lg:rounded-r-none">
           {/* Logo + collapse toggle */}
-          <div className="flex items-center gap-2.5 px-4 pt-6 pb-2">
+          <div className={`flex items-center pt-6 pb-2 ${collapsed ? "flex-col gap-2 px-2" : "gap-2.5 px-4"}`}>
             <div className="w-8 h-8 rounded-lg gradient-cta flex items-center justify-center glow-shadow shrink-0">
               <Zap className="w-4 h-4 text-primary-foreground" />
             </div>
@@ -58,7 +58,7 @@ const ArvoSidebar = ({ isOpen, onClose, collapsed, onToggleCollapse }: ArvoSideb
             )}
             <button
               onClick={onToggleCollapse}
-              className="hidden lg:flex p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors duration-300 text-muted-foreground hover:text-foreground"
+              className={`hidden lg:flex p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors duration-300 text-muted-foreground hover:text-foreground ${collapsed ? "mt-1" : ""}`}
             >
               {collapsed ? (
                 <PanelLeft className="w-4 h-4" />
