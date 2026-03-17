@@ -111,7 +111,7 @@ const ArvoSidebar = ({ isOpen, onClose, collapsed, onToggleCollapse }: ArvoSideb
                     title={chat}
                     className="w-full flex items-center justify-center p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-[rgba(255,255,255,0.05)] transition-all duration-300"
                   >
-                    <MessageSquare className="w-3.5 h-3.5 opacity-50" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50" />
                   </button>
                 ))}
             </div>
