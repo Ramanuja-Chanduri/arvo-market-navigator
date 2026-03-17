@@ -92,10 +92,9 @@ const ArvoSidebar = ({ isOpen, onClose, collapsed, onToggleCollapse }: ArvoSideb
                     {chats.map((chat) => (
                       <button
                         key={chat}
-                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-[rgba(255,255,255,0.05)] transition-all duration-300 text-left truncate"
+                        className="w-full px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-[rgba(255,255,255,0.05)] transition-all duration-300 text-left truncate"
                       >
-                        <MessageSquare className="w-3.5 h-3.5 shrink-0 opacity-50" />
-                        <span className="truncate">{chat}</span>
+                        {chat}
                       </button>
                     ))}
                   </div>
