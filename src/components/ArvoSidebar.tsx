@@ -22,10 +22,11 @@ const chatHistory = {
 interface ArvoSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  collapsed: boolean;
+  onToggleCollapse: () => void;
 }
 
-const ArvoSidebar = ({ isOpen, onClose }: ArvoSidebarProps) => {
-  const [collapsed, setCollapsed] = useState(false);
+const ArvoSidebar = ({ isOpen, onClose, collapsed, onToggleCollapse }: ArvoSidebarProps) => {
 
   return (
     <>
