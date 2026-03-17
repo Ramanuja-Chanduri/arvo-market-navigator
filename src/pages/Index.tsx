@@ -23,6 +23,7 @@ const mockResponse: ChatMessageData = {
 
 const Index = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<ChatMessageData[]>([]);
   const [mobilePulseOpen, setMobilePulseOpen] = useState(false);
