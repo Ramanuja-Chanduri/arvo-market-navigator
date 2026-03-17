@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Menu } from "lucide-react";
+import { Menu, Activity } from "lucide-react";
 import ArvoSidebar from "@/components/ArvoSidebar";
 import ChatMessage, { ChatMessageData } from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
 import SuggestionChips from "@/components/SuggestionChips";
+import LivePulsePanel from "@/components/LivePulsePanel";
 
 const mockResponse: ChatMessageData = {
   id: "2",
@@ -24,6 +25,7 @@ const Index = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<ChatMessageData[]>([]);
+  const [mobilePulseOpen, setMobilePulseOpen] = useState(false);
 
   const handleSend = (text: string) => {
     const userMsg: ChatMessageData = {
@@ -33,7 +35,6 @@ const Index = () => {
     };
     setMessages((prev) => [...prev, userMsg]);
 
-    // Simulate AI response
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
@@ -95,6 +96,34 @@ const Index = () => {
           onChange={setInputValue}
         />
       </div>
+
+      {/* Right Panel — desktop */}
+      <div className="hidden lg:block">
+        <LivePulsePanel />
+      </div>
+
+      {/* Right Panel — mobile overlay */}
+      {mobilePulseOpen && (
+        <div
+          className="fixed inset-0 bg-background/60 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setMobilePulseOpen(false)}
+        />
+      )}
+      <div
+        className={`fixed right-0 top-0 h-full z-50 lg:hidden transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          mobilePulseOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <LivePulsePanel className="!w-[300px]" />
+      </div>
+
+      {/* Mobile floating Pulse button */}
+      <button
+        onClick={() => setMobilePulseOpen(true)}
+        className="lg:hidden fixed bottom-20 right-4 z-30 w-12 h-12 rounded-full gradient-cta glow-shadow flex items-center justify-center text-primary-foreground shadow-lg"
+      >
+        <Activity className="w-5 h-5" />
+      </button>
     </div>
   );
 };
