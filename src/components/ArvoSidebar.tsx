@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Plus, Settings, Zap, MessageSquare, PanelLeftClose, PanelLeft } from "lucide-react";
 import AuroraBackground from "./AuroraBackground";
 
@@ -22,10 +21,11 @@ const chatHistory = {
 interface ArvoSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  collapsed: boolean;
+  onToggleCollapse: () => void;
 }
 
-const ArvoSidebar = ({ isOpen, onClose }: ArvoSidebarProps) => {
-  const [collapsed, setCollapsed] = useState(false);
+const ArvoSidebar = ({ isOpen, onClose, collapsed, onToggleCollapse }: ArvoSidebarProps) => {
 
   return (
     <>
@@ -57,7 +57,7 @@ const ArvoSidebar = ({ isOpen, onClose }: ArvoSidebarProps) => {
               </span>
             )}
             <button
-              onClick={() => setCollapsed((p) => !p)}
+              onClick={onToggleCollapse}
               className="hidden lg:flex p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors duration-300 text-muted-foreground hover:text-foreground"
             >
               {collapsed ? (
