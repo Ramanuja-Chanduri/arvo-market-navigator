@@ -1,4 +1,4 @@
-import { Plus, Settings, Zap, MessageSquare, PanelLeftClose, PanelLeft } from "lucide-react";
+import { Plus, Settings, Zap, PanelLeftClose, PanelLeft } from "lucide-react";
 import AuroraBackground from "./AuroraBackground";
 
 const chatHistory = {
