@@ -1,16 +1,102 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { Menu } from "lucide-react";
+import ArvoSidebar from "@/components/ArvoSidebar";
+import ChatMessage, { ChatMessageData } from "@/components/ChatMessage";
+import ChatInput from "@/components/ChatInput";
+import SuggestionChips from "@/components/SuggestionChips";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const mockResponse: ChatMessageData = {
+  id: "2",
+  role: "assistant",
+  content: `NVIDIA (NVDA) reported a strong Q3, beating analyst expectations across the board. Revenue came in at $18.12B vs. the $16.18B estimate — a 206% YoY increase driven primarily by Data Center demand for H100 GPUs.\n\nKey highlights:\n• Data Center revenue: $14.51B (+279% YoY)\n• Gaming revenue: $2.86B (+81% YoY)\n• Gross margin: 74% (up from 53.6% YoY)\n\nSentiment across major outlets is overwhelmingly bullish at 84%. Analysts are raising price targets, with a median of $950.`,
+  tickers: [
+    { symbol: "NVDA", name: "NVIDIA Corp", price: "875.24", change: 2.41 },
+    { symbol: "AMD", name: "Adv Micro Dev", price: "178.52", change: -0.87 },
+    { symbol: "SMCI", name: "Super Micro", price: "1,012.30", change: 5.12 },
+  ],
+  citations: [
+    { source: "Reuters", headline: "Nvidia Q3 earnings crush Wall Street estimates on AI chip demand" },
+    { source: "Bloomberg", headline: "Nvidia's data center revenue surges 279% in AI-driven boom" },
+  ],
+};
+
+const Index = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [messages, setMessages] = useState<ChatMessageData[]>([]);
+
+  const handleSend = (text: string) => {
+    const userMsg: ChatMessageData = {
+      id: Date.now().toString(),
+      role: "user",
+      content: text,
+    };
+    setMessages((prev) => [...prev, userMsg]);
+
+    // Simulate AI response
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        { ...mockResponse, id: (Date.now() + 1).toString() },
+      ]);
+    }, 600);
+  };
+
+  const handleSuggestion = (text: string) => {
+    setInputValue(text);
+  };
+
+  const isEmpty = messages.length === 0;
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="h-screen flex bg-background overflow-hidden">
+      <ArvoSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      {/* Main Area */}
+      <div className="flex-1 flex flex-col lg:ml-72 min-w-0">
+        {/* Header */}
+        <header className="flex items-center h-12 px-4 border-b border-luminous shrink-0">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="lg:hidden p-2 -ml-2 rounded-lg hover:bg-secondary transition-colors duration-300"
+          >
+            <Menu className="w-5 h-5 text-muted-foreground" />
+          </button>
+          <span className="text-sm text-muted-foreground ml-2 lg:ml-0">
+            {isEmpty ? "New conversation" : "NVIDIA earnings analysis"}
+          </span>
+        </header>
+
+        {/* Chat Body */}
+        <div className="flex-1 overflow-y-auto">
+          {isEmpty ? (
+            <div className="flex flex-col items-center justify-center h-full px-4">
+              <h1 className="text-2xl font-semibold tracking-tight text-foreground mb-2">
+                Market intelligence, <span className="text-gradient">distilled.</span>
+              </h1>
+              <p className="text-sm text-muted-foreground mb-10">
+                Ask Arvo anything about stocks, markets, or financial news.
+              </p>
+              <SuggestionChips onSelect={handleSuggestion} />
+            </div>
+          ) : (
+            <div className="max-w-3xl mx-auto px-4 py-8">
+              {messages.map((msg, i) => (
+                <ChatMessage key={msg.id} message={msg} index={i} />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Input */}
+        <ChatInput
+          onSend={handleSend}
+          value={inputValue}
+          onChange={setInputValue}
+        />
+      </div>
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
