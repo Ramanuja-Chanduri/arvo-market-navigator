@@ -106,7 +106,7 @@ const ArvoSidebar = ({ isOpen, onClose, collapsed, onToggleCollapse }: ArvoSideb
           )}
 
           {/* Bottom */}
-          <div className="px-3 py-4 border-t border-luminous flex items-center gap-3">
+          <div className={`px-3 py-4 border-t border-luminous flex items-center ${collapsed ? "flex-col gap-2" : "gap-3"}`}>
             <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-xs font-medium text-foreground shrink-0">
               A
             </div>
