@@ -102,19 +102,7 @@ const ArvoSidebar = ({ isOpen, onClose, collapsed, onToggleCollapse }: ArvoSideb
               ))}
             </div>
           ) : (
-            <div className="flex-1 overflow-y-auto px-2 space-y-1 pt-2">
-              {Object.values(chatHistory)
-                .flat()
-                .map((chat) => (
-                  <button
-                    key={chat}
-                    title={chat}
-                    className="w-full flex items-center justify-center p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-[rgba(255,255,255,0.05)] transition-all duration-300"
-                  >
-                    <div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50" />
-                  </button>
-                ))}
-            </div>
+            <div className="flex-1" />
           )}
 
           {/* Bottom */}
