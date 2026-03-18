@@ -24,7 +24,7 @@ const ChatMessage = ({ message, index }: { message: ChatMessageData; index: numb
         className={`max-w-2xl ${
           isUser
             ? "bg-secondary rounded-2xl rounded-br-md px-4 py-3"
-            : "border-l-2 border-accent pl-4"
+            : "border-l-2 border-[hsl(25,95%,53%)] pl-4"
         }`}
       >
         <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">
