@@ -109,18 +109,18 @@ const ChatItem = ({
       {menuOpen && (
         <div ref={menuRef} className="absolute right-0 top-full mt-1 z-[60]" style={menuStyle}>
           {confirmDelete ? (
-            <div className="w-[200px] p-3">
-              <p className="text-sm text-muted-foreground mb-3">Delete this chat?</p>
+            <div className="w-[180px] p-2.5">
+              <p className="text-[13px] text-muted-foreground mb-2">Delete this chat?</p>
               <div className="flex gap-2">
                 <button
                   onClick={() => { onDelete(); setMenuOpen(false); }}
-                  className="flex-1 text-sm py-2 rounded-lg bg-destructive/20 text-destructive hover:bg-destructive/30 transition-colors font-medium"
+                  className="flex-1 text-[13px] py-1.5 rounded-md bg-destructive/20 text-destructive hover:bg-destructive/30 transition-colors font-medium"
                 >
                   Delete
                 </button>
                 <button
                   onClick={() => setConfirmDelete(false)}
-                  className="flex-1 text-sm py-2 rounded-lg bg-[rgba(255,255,255,0.06)] text-muted-foreground hover:text-foreground transition-colors font-medium"
+                  className="flex-1 text-[13px] py-1.5 rounded-md bg-[rgba(255,255,255,0.06)] text-muted-foreground hover:text-foreground transition-colors font-medium"
                 >
                   Cancel
                 </button>
