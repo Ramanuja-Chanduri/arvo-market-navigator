@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Menu, Activity } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import ArvoSidebar from "@/components/ArvoSidebar";
 import ChatMessage, { ChatMessageData } from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
 import SuggestionChips from "@/components/SuggestionChips";
 import LivePulsePanel from "@/components/LivePulsePanel";
+import TypingIndicator from "@/components/TypingIndicator";
 
 const mockResponse: ChatMessageData = {
   id: "2",
