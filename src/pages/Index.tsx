@@ -100,6 +100,10 @@ const Index = () => {
               {messages.map((msg, i) => (
                 <ChatMessage key={msg.id} message={msg} index={i} />
               ))}
+              <AnimatePresence>
+                {isAiTyping && <TypingIndicator />}
+              </AnimatePresence>
+              <div ref={chatEndRef} />
             </div>
           )}
         </div>
