@@ -10,7 +10,21 @@ export interface ChatMessageData {
   citations?: { source: string; headline: string }[];
 }
 
-const ChatMessage = ({ message, index }: { message: ChatMessageData; index: number }) => {
+interface ChatMessageProps {
+  message: ChatMessageData;
+  index: number;
+  isStreaming?: boolean;
+}
+
+const BlinkingCursor = () => (
+  <motion.span
+    className="inline-block w-[2px] h-[1.1em] bg-primary ml-0.5 align-text-bottom"
+    animate={{ opacity: [1, 0] }}
+    transition={{ duration: 0.6, repeat: Infinity, ease: "steps(2)" }}
+  />
+);
+
+const ChatMessage = ({ message, index, isStreaming }: ChatMessageProps) => {
   const isUser = message.role === "user";
 
   return (
@@ -29,6 +43,7 @@ const ChatMessage = ({ message, index }: { message: ChatMessageData; index: numb
       >
         <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">
           {message.content}
+          {isStreaming && <BlinkingCursor />}
         </p>
 
         {message.tickers && message.tickers.length > 0 && (
