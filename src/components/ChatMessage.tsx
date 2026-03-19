@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import TickerCard from "./TickerCard";
 import CitationCard from "./CitationCard";
+import MessageActions from "./MessageActions";
 
 export interface ChatMessageData {
   id: string;
@@ -14,6 +15,8 @@ interface ChatMessageProps {
   message: ChatMessageData;
   index: number;
   isStreaming?: boolean;
+  onRegenerate?: () => void;
+  isRegenerating?: boolean;
 }
 
 const BlinkingCursor = () => (
@@ -24,8 +27,10 @@ const BlinkingCursor = () => (
   />
 );
 
-const ChatMessage = ({ message, index, isStreaming }: ChatMessageProps) => {
+const ChatMessage = ({ message, index, isStreaming, onRegenerate, isRegenerating }: ChatMessageProps) => {
   const isUser = message.role === "user";
+  const isAssistant = message.role === "assistant";
+  const showActions = isAssistant && !isStreaming && onRegenerate;
 
   return (
     <motion.div
@@ -60,6 +65,14 @@ const ChatMessage = ({ message, index, isStreaming }: ChatMessageProps) => {
               <CitationCard key={i} {...c} />
             ))}
           </div>
+        )}
+
+        {showActions && (
+          <MessageActions
+            content={message.content}
+            onRegenerate={onRegenerate}
+            isRegenerating={isRegenerating}
+          />
         )}
       </div>
     </motion.div>
