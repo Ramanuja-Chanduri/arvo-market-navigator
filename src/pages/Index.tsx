@@ -1,68 +1,91 @@
-import { useState, useRef, useEffect } from "react";
-import { Menu, Activity } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Menu, Activity, Square, ArrowDown } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import ArvoSidebar from "@/components/ArvoSidebar";
 import ChatMessage, { ChatMessageData } from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
 import SuggestionChips from "@/components/SuggestionChips";
 import LivePulsePanel from "@/components/LivePulsePanel";
-import TypingIndicator from "@/components/TypingIndicator";
-
-const mockResponse: ChatMessageData = {
-  id: "2",
-  role: "assistant",
-  content: `NVIDIA (NVDA) reported a strong Q3, beating analyst expectations across the board. Revenue came in at $18.12B vs. the $16.18B estimate — a 206% YoY increase driven primarily by Data Center demand for H100 GPUs.\n\nKey highlights:\n• Data Center revenue: $14.51B (+279% YoY)\n• Gaming revenue: $2.86B (+81% YoY)\n• Gross margin: 74% (up from 53.6% YoY)\n\nSentiment across major outlets is overwhelmingly bullish at 84%. Analysts are raising price targets, with a median of $950.`,
-  tickers: [
-    { symbol: "NVDA", name: "NVIDIA Corp", price: "875.24", change: 2.41 },
-    { symbol: "AMD", name: "Adv Micro Dev", price: "178.52", change: -0.87 },
-    { symbol: "SMCI", name: "Super Micro", price: "1,012.30", change: 5.12 },
-  ],
-  citations: [
-    { source: "Reuters", headline: "Nvidia Q3 earnings crush Wall Street estimates on AI chip demand" },
-    { source: "Bloomberg", headline: "Nvidia's data center revenue surges 279% in AI-driven boom" },
-  ],
-};
+import StreamingSkeleton from "@/components/StreamingSkeleton";
+import StreamError from "@/components/StreamError";
+import { useChat } from "@/hooks/useChat";
 
 const Index = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [messages, setMessages] = useState<ChatMessageData[]>([]);
   const [mobilePulseOpen, setMobilePulseOpen] = useState(false);
-  const [isAiTyping, setIsAiTyping] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const {
+    messages,
+    streamingStatus,
+    streamingContent,
+    error,
+    sendMessage,
+    stopGeneration,
+    retryLastMessage,
+  } = useChat();
+
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  const userScrolledRef = useRef(false);
+  const [showJumpButton, setShowJumpButton] = useState(false);
+
+  const isActive = streamingStatus === "waiting" || streamingStatus === "streaming";
+
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
+    chatEndRef.current?.scrollIntoView({ behavior });
+  }, []);
+
+  // Detect user scroll-up during streaming
+  useEffect(() => {
+    const container = chatContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+      const scrolledUp = distanceFromBottom > 100;
+
+      if (isActive) {
+        userScrolledRef.current = scrolledUp;
+        setShowJumpButton(scrolledUp);
+      } else {
+        setShowJumpButton(false);
+        userScrolledRef.current = false;
+      }
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [isActive]);
+
+  // Auto-scroll on new messages and streaming content
+  useEffect(() => {
+    if (!userScrolledRef.current) {
+      scrollToBottom("smooth");
+    }
+  }, [messages, streamingContent, streamingStatus, scrollToBottom]);
+
+  const handleJumpToLatest = () => {
+    userScrolledRef.current = false;
+    setShowJumpButton(false);
+    scrollToBottom("smooth");
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, isAiTyping]);
-
   const handleSend = (text: string) => {
-    const userMsg: ChatMessageData = {
-      id: Date.now().toString(),
-      role: "user",
-      content: text,
-    };
-    setMessages((prev) => [...prev, userMsg]);
-    setIsAiTyping(true);
-
-    setTimeout(() => {
-      setIsAiTyping(false);
-      setMessages((prev) => [
-        ...prev,
-        { ...mockResponse, id: (Date.now() + 1).toString() },
-      ]);
-    }, 600);
+    userScrolledRef.current = false;
+    setShowJumpButton(false);
+    sendMessage(text);
+    // Instant scroll for user's own message
+    requestAnimationFrame(() => scrollToBottom("instant"));
   };
 
   const handleSuggestion = (text: string) => {
     setInputValue(text);
   };
 
-  const isEmpty = messages.length === 0;
+  const isEmpty = messages.length === 0 && streamingStatus === "idle";
 
   return (
     <div className="h-screen flex bg-background overflow-hidden">
@@ -84,7 +107,7 @@ const Index = () => {
         </header>
 
         {/* Chat Body */}
-        <div className="flex-1 overflow-y-auto">
+        <div ref={chatContainerRef} className="flex-1 overflow-y-auto relative">
           {isEmpty ? (
             <div className="flex flex-col items-center justify-center h-full px-4">
               <h1 className="text-2xl font-semibold tracking-tight text-foreground mb-2">
@@ -100,13 +123,63 @@ const Index = () => {
               {messages.map((msg, i) => (
                 <ChatMessage key={msg.id} message={msg} index={i} />
               ))}
-              <AnimatePresence>
-                {isAiTyping && <TypingIndicator />}
+
+              {/* Streaming AI response */}
+              <AnimatePresence mode="wait">
+                {streamingStatus === "waiting" && (
+                  <StreamingSkeleton key="skeleton" />
+                )}
               </AnimatePresence>
+
+              {streamingStatus === "streaming" && streamingContent && (
+                <ChatMessage
+                  key="streaming"
+                  message={{
+                    id: "streaming",
+                    role: "assistant",
+                    content: streamingContent,
+                  }}
+                  index={messages.length}
+                  isStreaming
+                />
+              )}
+
+              {streamingStatus === "error" && error && (
+                <StreamError error={error} onRetry={retryLastMessage} />
+              )}
+
               <div ref={chatEndRef} />
             </div>
           )}
+
+          {/* Jump to latest button */}
+          <AnimatePresence>
+            {showJumpButton && (
+              <button
+                onClick={handleJumpToLatest}
+                className="fixed bottom-32 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary border border-luminous text-xs text-muted-foreground hover:text-foreground transition-colors shadow-lg"
+              >
+                <ArrowDown className="w-3 h-3" />
+                Jump to latest
+              </button>
+            )}
+          </AnimatePresence>
         </div>
+
+        {/* Stop generating button */}
+        <AnimatePresence>
+          {isActive && (
+            <div className="flex justify-center -mb-1">
+              <button
+                onClick={stopGeneration}
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-secondary border border-luminous text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Square className="w-3 h-3 fill-current" />
+                Stop generating
+              </button>
+            </div>
+          )}
+        </AnimatePresence>
 
         {/* Input */}
         <ChatInput
