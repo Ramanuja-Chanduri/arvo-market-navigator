@@ -29,6 +29,16 @@ const Index = () => {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState<ChatMessageData[]>([]);
   const [mobilePulseOpen, setMobilePulseOpen] = useState(false);
+  const [isAiTyping, setIsAiTyping] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isAiTyping]);
 
   const handleSend = (text: string) => {
     const userMsg: ChatMessageData = {
@@ -37,8 +47,10 @@ const Index = () => {
       content: text,
     };
     setMessages((prev) => [...prev, userMsg]);
+    setIsAiTyping(true);
 
     setTimeout(() => {
+      setIsAiTyping(false);
       setMessages((prev) => [
         ...prev,
         { ...mockResponse, id: (Date.now() + 1).toString() },
