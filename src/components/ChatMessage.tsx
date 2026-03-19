@@ -19,8 +19,8 @@ interface ChatMessageProps {
 const BlinkingCursor = () => (
   <motion.span
     className="inline-block w-[2px] h-[1.1em] bg-primary ml-0.5 align-text-bottom"
-    animate={{ opacity: [1, 0] }}
-    transition={{ duration: 0.6, repeat: Infinity, ease: "steps(2)" }}
+    animate={{ opacity: [1, 0, 1] }}
+    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
   />
 );
 
