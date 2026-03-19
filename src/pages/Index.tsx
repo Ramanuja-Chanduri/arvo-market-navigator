@@ -121,7 +121,13 @@ const Index = () => {
           ) : (
             <div className="max-w-3xl mx-auto px-4 py-8">
               {messages.map((msg, i) => (
-                <ChatMessage key={msg.id} message={msg} index={i} />
+                <ChatMessage
+                  key={msg.id}
+                  message={msg}
+                  index={i}
+                  onRegenerate={msg.role === "assistant" ? retryLastMessage : undefined}
+                  isRegenerating={isActive}
+                />
               ))}
 
               {/* Streaming AI response */}
