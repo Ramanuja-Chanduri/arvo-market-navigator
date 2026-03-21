@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Zap } from "lucide-react";
-import AuroraBackground from "@/components/AuroraBackground";
+import AnimatedBackground from "@/components/AnimatedBackground";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const Auth = () => {
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-background relative overflow-hidden">
-      <AuroraBackground />
+      <AnimatedBackground />
 
       {/* Auth Card */}
       <div

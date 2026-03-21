@@ -8,6 +8,7 @@ import SuggestionChips from "@/components/SuggestionChips";
 import LivePulsePanel from "@/components/LivePulsePanel";
 import StreamingSkeleton from "@/components/StreamingSkeleton";
 import StreamError from "@/components/StreamError";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import { useChat } from "@/hooks/useChat";
 
 const Index = () => {
@@ -88,7 +89,8 @@ const Index = () => {
   const isEmpty = messages.length === 0 && streamingStatus === "idle";
 
   return (
-    <div className="h-screen flex bg-background overflow-hidden">
+    <div className="h-screen flex overflow-hidden relative">
+      <AnimatedBackground />
       <ArvoSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} collapsed={sidebarCollapsed} onToggleCollapse={() => setSidebarCollapsed(p => !p)} />
 
       {/* Main Area */}
