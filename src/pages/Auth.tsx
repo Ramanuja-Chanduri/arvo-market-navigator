@@ -46,7 +46,7 @@ const Auth = () => {
     "w-full rounded-[10px] bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.10)] text-foreground placeholder:text-muted-foreground px-4 py-3 text-sm transition-all duration-200 focus:outline-none focus:border-primary focus:shadow-[0_0_12px_-3px_hsl(221,83%,53%,0.4)]";
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center bg-background relative overflow-hidden">
+    <div className="h-screen w-screen flex items-center justify-center relative overflow-hidden">
       <AnimatedBackground />
 
       {/* Auth Card */}
