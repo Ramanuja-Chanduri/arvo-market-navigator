@@ -21,7 +21,7 @@ interface ChatMessageProps {
 
 const BlinkingCursor = () => (
   <motion.span
-    className="inline-block w-[2px] h-[1.1em] bg-primary ml-0.5 align-text-bottom"
+    className="inline-block w-[2px] h-[1.1em] bg-[hsl(270,60%,65%)] ml-0.5 align-text-bottom"
     animate={{ opacity: [1, 0, 1] }}
     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
   />
@@ -42,8 +42,8 @@ const ChatMessage = ({ message, index, isStreaming, onRegenerate, isRegenerating
       <div
         className={`max-w-2xl ${
           isUser
-            ? "bg-secondary rounded-2xl rounded-br-md px-4 py-3"
-            : "border-l-2 border-[hsl(25,95%,53%)] pl-4"
+            ? "glass-surface rounded-2xl rounded-br-md px-4 py-3"
+            : "glass-surface rounded-2xl px-4 py-3 border-l-2 !border-l-[rgba(123,47,190,0.7)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
         }`}
       >
         <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">

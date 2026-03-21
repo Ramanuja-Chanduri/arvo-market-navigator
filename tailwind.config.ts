@@ -102,6 +102,10 @@ export default {
           "75%": { transform: "translate(8vw, -10vh) scale(0.98)", opacity: "0.8" },
           "100%": { transform: "translate(0, 0) scale(1)", opacity: "0.55" },
         },
+        "glow-pulse": {
+          "0%, 100%": { opacity: "0.4", transform: "scale(1)" },
+          "50%": { opacity: "1", transform: "scale(1.15)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -110,6 +114,7 @@ export default {
         "orb-1": "orb-1 25s ease-in-out infinite",
         "orb-2": "orb-2 30s ease-in-out infinite",
         "orb-3": "orb-3 35s ease-in-out infinite",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
       },
     },
   },
