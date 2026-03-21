@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Plus, Settings, Zap, PanelLeftClose, PanelLeft, MoreVertical, Pencil, Trash2, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import AuroraBackground from "./AuroraBackground";
+import AnimatedBackground from "./AnimatedBackground";
 
 const initialChatHistory: Record<string, string[]> = {
   Today: [
@@ -198,7 +198,7 @@ const ArvoSidebar = ({ isOpen, onClose, collapsed, onToggleCollapse }: ArvoSideb
           collapsed ? "w-16" : "w-72"
         } ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
-        <AuroraBackground />
+        <AnimatedBackground />
 
         <div className="relative flex flex-col h-full glass-surface rounded-r-2xl lg:rounded-r-none">
           {/* Logo + collapse toggle */}

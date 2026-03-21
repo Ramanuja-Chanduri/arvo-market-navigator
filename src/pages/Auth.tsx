@@ -50,16 +50,7 @@ const Auth = () => {
       <AnimatedBackground />
 
       {/* Auth Card */}
-      <div
-        className="relative z-10 w-full max-w-[420px] mx-4 p-10 rounded-[20px]"
-        style={{
-          background: "rgba(10, 12, 20, 0.60)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          border: "1px solid rgba(255, 255, 255, 0.09)",
-          boxShadow: "0 8px 40px rgba(0, 0, 0, 0.4)",
-        }}
-      >
+      <div className="relative z-10 w-full max-w-[420px] mx-4 p-10 rounded-[20px] glass-surface">
         {/* Header */}
         <div className="flex flex-col items-center mb-8">
           <div className="w-10 h-10 rounded-lg gradient-cta flex items-center justify-center mb-3">
